@@ -1,7 +1,5 @@
 # Pascal's Triangle
 
-**LeetCode:** 118. Pascal's Triangle
-
 ## Problem Statement
 
 Given an integer `numRows`, return the first `numRows` rows of Pascal's Triangle.
@@ -13,13 +11,13 @@ In Pascal's Triangle:
 
 ### Example
 
-**Input**
+### Input
 
 ```python
 numRows = 5
 ```
 
-**Output**
+### Output
 
 ```python
 [
@@ -33,56 +31,108 @@ numRows = 5
 
 ---
 
-## Approach
+## LeetCode Link
 
-I used the **zero-padding technique** to generate each row.
+https://leetcode.com/problems/pascals-triangle/
 
-Instead of handling the first and last elements separately, I pad the previous row with zeros on both sides and then add adjacent elements.
+---
 
-### Example
+## My Initial Thought Process
 
-Previous Row:
+I first tried to understand the pattern manually.
+
+```text
+Row 0 -> [1]
+
+Row 1 -> [1,1]
+
+Row 2 -> [1,2,1]
+
+Row 3 -> [1,3,3,1]
+
+Row 4 -> [1,4,6,4,1]
+```
+
+I noticed:
+
+- Every row starts with `1`
+- Every row ends with `1`
+- The middle elements come from adding adjacent elements of the previous row
+
+Example:
+
+```python
+Previous Row
+
+[1,3,3,1]
+
+Current Row
+
+[1,4,6,4,1]
+```
+
+Because:
+
+```python
+1 + 3 = 4
+3 + 3 = 6
+3 + 1 = 4
+```
+
+I understood the pattern but struggled to convert it into code.
+
+---
+
+## Learning From NeetCode
+
+After attempting the problem, I watched NeetCode's explanation and learned a very clever trick.
+
+Instead of handling:
+
+- First element separately
+- Middle elements separately
+- Last element separately
+
+we can use **zero padding**.
+
+---
+
+## Key Observation
+
+Suppose the previous row is:
 
 ```python
 [1,2,1]
 ```
 
-After Padding:
+Pad zeros on both sides:
 
 ```python
 [0,1,2,1,0]
 ```
 
-Add adjacent pairs:
+Now add adjacent elements:
 
 ```python
-0+1 = 1
-1+2 = 3
-2+1 = 3
-1+0 = 1
+0 + 1 = 1
+1 + 2 = 3
+2 + 1 = 3
+1 + 0 = 1
 ```
 
-New Row:
+Result:
 
 ```python
 [1,3,3,1]
 ```
 
----
+which is exactly the next row of Pascal's Triangle.
 
-## Algorithm
-
-1. Start with the first row `[1]`.
-2. For each new row:
-   - Take the last row generated.
-   - Pad it with zeros on both sides.
-   - Add adjacent elements.
-   - Store the new row.
-3. Repeat until `numRows` rows are generated.
+This completely eliminates the need for special cases.
 
 ---
 
-## Solution
+## Optimized Solution
 
 ```python
 from typing import List
@@ -92,6 +142,7 @@ class Solution:
         res = [[1]]
 
         for i in range(numRows - 1):
+
             temp = [0] + res[-1] + [0]
             row = []
 
@@ -113,13 +164,13 @@ Current Row:
 [1,2,1]
 ```
 
-Padded Row:
+Padding:
 
 ```python
 [0,1,2,1,0]
 ```
 
-Adjacent Sums:
+Generate next row:
 
 ```python
 0+1 = 1
@@ -128,52 +179,149 @@ Adjacent Sums:
 1+0 = 1
 ```
 
-Generated Row:
+New Row:
 
 ```python
 [1,3,3,1]
+```
+
+Store it inside the result.
+
+Continue until all rows are generated.
+
+---
+
+## Why This Works
+
+Padding creates automatic boundaries.
+
+Example:
+
+```python
+[0,1,2,1,0]
+```
+
+First element:
+
+```python
+0 + 1 = 1
+```
+
+Last element:
+
+```python
+1 + 0 = 1
+```
+
+Middle elements:
+
+```python
+1 + 2 = 3
+2 + 1 = 3
+```
+
+Thus every element of the next row is generated correctly using a single rule:
+
+```text
+Add adjacent elements.
 ```
 
 ---
 
 ## Complexity Analysis
 
-### Time Complexity
+Let:
 
 ```text
-O(numRows²)
+n = numRows
 ```
+
+### Time Complexity
 
 Each element of Pascal's Triangle is generated exactly once.
 
-### Space Complexity
-
 ```text
-O(numRows²)
+O(n²)
 ```
 
-The entire triangle is stored in memory.
+### Space Complexity
+
+We store the complete triangle.
+
+```text
+O(n²)
+```
+
+---
+
+## Pattern Learned
+
+### Building Current State From Previous State
+
+Each row is generated using information from the previous row.
+
+Example:
+
+```python
+Previous Row
+↓
+Pad With Zeros
+↓
+Add Adjacent Elements
+↓
+Generate Current Row
+```
+
+This introduces the intuition behind Dynamic Programming:
+
+```text
+Build future results using already computed results.
+```
+
+---
+
+## Key Takeaways
+
+- Always look for patterns before coding.
+- Understanding the structure of Pascal's Triangle is more important than memorizing the code.
+- Zero-padding is a clever technique that removes edge-case handling.
+- Dynamic Programming often involves building new answers from previously computed answers.
+- Sometimes watching an optimized solution after attempting the problem can reveal cleaner approaches.
 
 ---
 
 ## Concepts Practiced
 
-- Arrays / Lists
-- Pattern Recognition
-- Simulation
-- Dynamic Programming Intuition
-- Matrix Construction
+✅ Arrays
+
+✅ 2D Arrays
+
+✅ Pattern Recognition
+
+✅ Simulation
+
+✅ Dynamic Programming Intuition
+
+✅ Matrix Construction
 
 ---
 
-## Key Learning
+## Final Complexity
 
-A neat trick for Pascal's Triangle is to pad the previous row with zeros:
+| Approach | Time | Space |
+|-----------|--------|--------|
+| Generate Entire Triangle | O(n²) | O(n²) |
 
-```python
-temp = [0] + previous_row + [0]
-```
+---
 
-Then generate the next row by adding adjacent elements.
+## Status
 
-This eliminates special handling for the first and last elements and leads to a clean solution.
+✅ Solved
+
+✅ Learned Pascal's Triangle Pattern
+
+✅ Learned Zero-Padding Technique
+
+✅ Introduced to Dynamic Programming Intuition
+
+✅ Understood Building Current State From Previous State
