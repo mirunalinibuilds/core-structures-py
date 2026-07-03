@@ -61,20 +61,8 @@ The most straightforward approach is:
 1. Visit every element in the matrix.
 2. Count how many are negative.
 
-Example:
-
-```python
-count = 0
-
-for row in grid:
-    for num in row:
-        if num < 0:
-            count += 1
-```
-
 This works, but ignores the fact that the matrix is sorted.
 
----
 
 # Brute Force Solution
 
